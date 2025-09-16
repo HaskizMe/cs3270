@@ -52,3 +52,5 @@ Thumbs.db
 # Data files (generated / local only)
 *.csv
 *.html
+
+*.log

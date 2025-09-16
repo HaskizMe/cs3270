@@ -5,4 +5,10 @@ class WeatherLoader:
         self.file_path = file_path
 
     def load(self):
-        return pd.read_csv(self.file_path)
+        try:
+            df = pd.read_csv(self.file_path)
+            return df
+        except FileNotFoundError:
+            raise
+        except Exception:
+            raise

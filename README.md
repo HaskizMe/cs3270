@@ -46,3 +46,14 @@ pip install -i https://test.pypi.org/simple/ weather-stats-bh==0.1
 * WeatherLoader: Handles loading CSV data into a pandas DataFrame.
 * WeatherProcessor (module): Contains the logic for calculating and printing descriptive statistics (mean, median, mode, range).
 * WeatherStorage: Provides a simple way to save results to a CSV file.
+
+
+## Module 4 (Iterators and Generators)
+
+### Iterator Implementation
+- **Location**: `WeatherStatsIterator` class in `weather_stats/stats.py`
+
+### Generator Implementation
+- **Location**: `generate_stats()` method in `WeatherProcessor` class
+
+Both are demonstrated in the `print_descriptive_stats()` method.
