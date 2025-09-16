@@ -1,0 +1,48 @@
+# Weather Data Loader
+
+## Overview
+Loads a weather dataset (CSV) and prints out the top 10 rows.
+
+## Environment
+* Python: 3.12  
+* Virtual Environment: `.venv` created with PyCharm  
+* Dependencies: pandas, weather_stats  
+
+## Setup
+```bash
+# create venv if needed
+python -m venv .venv
+source .venv/bin/activate   # On Windows: .venv\Scripts\activate
+pip install pandas
+
+```
+
+## How to build weather_stats module
+```bash
+
+python -m pip install --upgrade build
+pip install setuptools wheel
+python -m build
+
+pip install twine # optional: for uploading to testPyPi
+```
+
+
+## Install weather_stats module (locally)
+```bash
+
+pip install dist/weather_stats_bh-0.1-py3-none-any.whl
+```
+> **Note:** If dist folder doesn't exist make sure to build the module before doing this with the commands above.
+
+## Install weather_stats module (from testpypi)
+```bash
+
+pip install -i https://test.pypi.org/simple/ weather-stats-bh==0.1
+```
+
+## OOP Design
+
+* WeatherLoader: Handles loading CSV data into a pandas DataFrame.
+* WeatherProcessor (module): Contains the logic for calculating and printing descriptive statistics (mean, median, mode, range).
+* WeatherStorage: Provides a simple way to save results to a CSV file.
