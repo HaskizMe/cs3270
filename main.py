@@ -1,6 +1,6 @@
 import logging
 from weather_loader import WeatherLoader
-from weather_stats import WeatherProcessor
+from weather_stats import WeatherProcessor, WeatherStatsIterator
 from weather_storage import WeatherStorage
 
 # Configure logging
@@ -20,12 +20,14 @@ if __name__ == "__main__":
         logger.info("Loading weather data")
         loader = WeatherLoader("weather_data/Weather Training Data.csv")
         df = loader.load()
+        logger.info(f"Successfully loaded data with {len(df)} rows")
 
         # Process raw data
         logger.info("Processing data")
         processor = WeatherProcessor(df)
+        
         processor.print_descriptive_stats()
-
+        
         # Save to storage
         logger.info("Saving statistics")
         storage = WeatherStorage()

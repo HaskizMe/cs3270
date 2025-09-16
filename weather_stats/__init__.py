@@ -1,3 +1,3 @@
-from .stats import WeatherProcessor
+from .stats import WeatherProcessor, WeatherStatsIterator
 
-__all__ = ["WeatherProcessor"]
+__all__ = ["WeatherProcessor", "WeatherStatsIterator"]
