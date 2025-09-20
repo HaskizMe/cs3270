@@ -57,3 +57,10 @@ pip install -i https://test.pypi.org/simple/ weather-stats-bh==0.1
 - **Location**: `generate_stats()` method in `WeatherProcessor` class
 
 Both are demonstrated in the `print_descriptive_stats()` method.
+
+## Module 5 (Testing)
+
+### PyTest
+- **Location**: `test_weather_loader.py`, `test_weather_storage.py`, `weather_stats/test_weather_stats.py`
+
+- **Covers**: Saving stats to a CSV file, loading a CSV file, and printing descriptive statistics.
