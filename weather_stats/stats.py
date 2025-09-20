@@ -37,24 +37,9 @@ class WeatherProcessor:
             yield stats
 
     def print_descriptive_stats(self):
-        """Print descriptive statistics using both generator and iterator"""
+        """Print descriptive statistics"""
         try:
-            # Using the iterator
-            print("\n=== Iterator Demo ===")
-            print("First 3 columns using WeatherStatsIterator:")
-            iterator = iter(self)
-            for _ in range(3):
-                try:
-                    stats = next(iterator)
-                    print(f"\nColumn: {stats['column']}")
-                    print(f"  Median: {stats['median']:.2f}")
-                    print(f"  Mode: {stats['mode']}")
-                except StopIteration:
-                    break
-
             # Full statistics using generator
-            print("\n=== Full Statistics ===")
-            print("\nComplete statistics for all numeric columns:")
             for stats in self.generate_stats():
                 print(f"\nColumn: {stats['column']}")
                 print(f"  Mean   : {stats['mean']:.2f}")
