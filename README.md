@@ -6,14 +6,14 @@ Loads a weather dataset (CSV) and prints out the top 10 rows.
 ## Environment
 * Python: 3.12  
 * Virtual Environment: `.venv` created with PyCharm  
-* Dependencies: pandas, weather_stats  
+* Dependencies: pandas, weather_stats, matplotlib, pytest 
 
 ## Setup
 ```bash
 # create venv if needed
 python -m venv .venv
 source .venv/bin/activate   # On Windows: .venv\Scripts\activate
-pip install pandas
+pip install pandas matplotlib pytest
 
 ```
 
@@ -64,3 +64,12 @@ Both are demonstrated in the `print_descriptive_stats()` method.
 - **Location**: `test_weather_loader.py`, `test_weather_storage.py`, `weather_stats/test_weather_stats.py`
 
 - **Covers**: Saving stats to a CSV file, loading a CSV file, and printing descriptive statistics.
+
+
+## Module 6 (Data Visualization)
+- **Location**: `visualize_data()` method in `weather_stats/stats.py`
+
+- **Covers**: Visualizing data as a bar chart.
+
+- **Test**: `test_visualize_data_returns_correct_means` in `weather_stats/test_weather_stats.py`
+
