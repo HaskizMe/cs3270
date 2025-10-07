@@ -1,5 +1,6 @@
 import logging
 from collections.abc import Iterator
+import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +52,32 @@ class WeatherProcessor:
             logger.error(f"Error calculating descriptive statistics: {str(e)}")
             raise
 
+    def visualize_data(self):
+        """
+        Visualize the average of selected numeric weather columns as a bar chart.
+        """
+
+        columns_to_plot = ["MinTemp", "MaxTemp"]
+
+        existing_cols = [col for col in columns_to_plot if col in self.df.columns]
+        if not existing_cols:
+            logger.warning("None of the selected columns exist in the DataFrame.")
+            return
+
+        # Calculate the average for these columns
+        means = self.df[existing_cols].mean().dropna()
+
+        # Plot as a bar chart
+        plt.figure(figsize=(10, 6))
+        means.plot(kind="bar", color="skyblue")
+        plt.title("Average Min and Max Temperature")
+        plt.ylabel("Average Temperature (Celsius)")
+        plt.xticks(rotation=45, ha="right")
+        plt.grid(axis="y", alpha=0.3)
+        plt.tight_layout()
+        plt.show()
+
+        return means
 
 class WeatherStatsIterator(Iterator):
     """Iterator class for WeatherProcessor that iterates over weather statistics"""

@@ -2,6 +2,8 @@ import pytest
 import pandas as pd
 import numpy as np
 from weather_stats.stats import WeatherStatsIterator, WeatherProcessor
+import matplotlib.pyplot as plt
+
 
 @pytest.fixture
 def sample_dataframe():
@@ -77,3 +79,21 @@ def test_print_descriptive_stats(sample_dataframe, capsys):
     assert "Mean   : 55.75" in output
     assert "Median : 56.50" in output
     assert "Range  : 10.00" in output
+
+def test_visualize_data_returns_correct_means(monkeypatch):
+    # Prevent GUI pop-up
+    monkeypatch.setattr(plt, "show", lambda: None)
+
+    df = pd.DataFrame({
+        "MinTemp": [10, 12, None, 14],
+        "MaxTemp": [20, 22, 24, None],
+        "Rainfall": [0.1, 0.0, 1.2, 0.4],
+    })
+    wp = WeatherProcessor(df)
+
+    means = wp.visualize_data()
+    # Expected: mean ignores NaN by default
+    # MinTemp mean over [10, 12, 14] = 12.0
+    # MaxTemp mean over [20, 22, 24] = 22.0
+    assert round(float(means["MinTemp"]), 2) == 12.00
+    assert round(float(means["MaxTemp"]), 2) == 22.00

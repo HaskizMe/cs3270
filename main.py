@@ -27,6 +27,8 @@ if __name__ == "__main__":
         processor = WeatherProcessor(df)
         
         processor.print_descriptive_stats()
+        # Visualize data
+        processor.visualize_data()
         
         # Save to storage
         logger.info("Saving statistics")
