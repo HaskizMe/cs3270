@@ -73,3 +73,7 @@ Both are demonstrated in the `print_descriptive_stats()` method.
 
 - **Test**: `test_visualize_data_returns_correct_means` in `weather_stats/test_weather_stats.py`
 
+## Module 7 (Concurrency)
+- **Location**: `load_concurrent()` method in `weather_loader.py`
+
+- **Covers**: Added the ability to load multiple CSV files concurrently using ThreadPoolExecutor.
