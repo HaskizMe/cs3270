@@ -77,3 +77,22 @@ Both are demonstrated in the `print_descriptive_stats()` method.
 - **Location**: `load_concurrent()` method in `weather_loader.py`
 
 - **Covers**: Added the ability to load multiple CSV files concurrently using ThreadPoolExecutor.
+
+
+## Module 8 (PySpark)
+- **File Location**: `notebooks/Module_8_pyspark.ipynb` (Open notebook in google collab changes can be found in the notebook) [Google Collab Project](https://colab.research.google.com/drive/1w-dgeYc4opu230ykoIfMdx9Cgh9b6CZe#scrollTo=E96mC78N3mZh)
+### Changes/modifications:
+#### weather_loader.py
+  - Modified to use PySpark instead of Pandas to load the data.
+  - Removed the `load_concurrent()` method since pyspark isn't thread safe
+#### stats.py
+  - Updated `WeatherProcessor` numeric column detection from select_dtypes() to Spark schema inspection (NumericType) since Pandas helpers don’t exist in Spark.
+  - Replaced Pandas operations (mean, median, mode, range) with Spark equivalents (F.avg, F.min, F.max, approxQuantile, groupBy().count()).
+  - Used .collect() only on small aggregated results, because Spark computations are lazy and distributed.
+  - Visualization now uses Spark to aggregate values first, then collects a tiny result to plot locally—matplotlib cannot operate on Spark DataFrames directly.
+  - Pandas is only used for lightweight plotting support because PySpark cannot interface directly with matplotlib. All core data processing, statistics, and transformations are handled entirely in PySpark.
+#### weather_storage.py
+ - Replaced to_csv() (Pandas-only) with df.write.csv() (PySpark).
+ - Added .option("header", True) to include headers like Pandas.
+ - Added .mode("overwrite") to match typical overwrite behavior.
+ - Added .coalesce(1) optionally to write a single CSV file instead of many tiny partitioned files.
