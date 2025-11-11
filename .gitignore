@@ -8,6 +8,8 @@ __pycache__/
 venv/
 env/
 
+*.db
+
 # Packaging / distribution
 build/
 dist/
@@ -51,6 +53,5 @@ Thumbs.db
 
 # Data files (generated / local only)
 *.csv
-*.html
 
 *.log
