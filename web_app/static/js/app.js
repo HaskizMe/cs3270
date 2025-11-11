@@ -8,7 +8,6 @@ let currentLimit = 25;
 
 // Initialize app on page load
 document.addEventListener("DOMContentLoaded", () => {
-    loadStatistics();
     loadLocations();
     setupEventListeners();
 });
@@ -18,59 +17,6 @@ function setupEventListeners() {
     const searchForm = document.getElementById("search-form");
     searchForm.addEventListener("submit", handleSearch);
     searchForm.addEventListener("reset", handleReset);
-
-    // Update location-based stats when location changes
-    const locationSelect = document.getElementById("location");
-    locationSelect.addEventListener("change", (e) => {
-        loadStatistics(e.target.value);
-    });
-}
-
-// Load statistics from API
-async function loadStatistics(location = "") {
-    try {
-        const url = location
-            ? `${API_BASE}/stats?location=${encodeURIComponent(location)}`
-            : `${API_BASE}/stats`;
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.success) {
-            displayStatistics(data.statistics);
-        }
-    } catch (error) {
-        console.error("Error loading statistics:", error);
-    }
-}
-
-// Display statistics in cards
-function displayStatistics(stats) {
-    const statsContainer = document.getElementById("stats-container");
-    statsContainer.innerHTML = `
-        <div class="stat-card">
-            <div class="stat-value">${stats.total_records.toLocaleString()}</div>
-            <div class="stat-label">Total Records</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">${
-                stats.avg_min_temp !== null ? stats.avg_min_temp + "°C" : "N/A"
-            }</div>
-            <div class="stat-label">Avg Min Temp</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">${
-                stats.avg_max_temp !== null ? stats.avg_max_temp + "°C" : "N/A"
-            }</div>
-            <div class="stat-label">Avg Max Temp</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">${
-                stats.avg_rainfall !== null ? stats.avg_rainfall + "mm" : "N/A"
-            }</div>
-            <div class="stat-label">Avg Rainfall</div>
-        </div>
-    `;
 }
 
 // Load locations for dropdown
@@ -124,9 +70,6 @@ function handleReset() {
         '<p class="no-results">Use the search form above to find weather data.</p>';
     document.getElementById("pagination").style.display = "none";
     document.getElementById("results-info").textContent = "";
-
-    // Reset stats to all locations
-    loadStatistics();
 }
 
 // Load weather data from API
