@@ -43,8 +43,25 @@ def get_statistics():
 if __name__ == '__main__':
     # Create database tables if they don't exist
     with app.app_context():
+        from models import WeatherData
         db.create_all()
         logger.info("Database tables created")
+        
+        # Check if database is empty and load data if needed
+        row_count = db.session.query(WeatherData).count()
+        if row_count == 0:
+            logger.info("Database is empty. Loading data from CSV...")
+            try:
+                from utils.load_data import load_csv_to_database
+                csv_path = os.path.join(basedir, '..', 'descriptive_stats.csv')
+                csv_path = os.path.abspath(csv_path)
+                load_csv_to_database(csv_path)
+                logger.info("Data loaded successfully!")
+            except Exception as e:
+                logger.warning(f"Could not load data automatically: {e}")
+                logger.info("You can manually load data by running: python load_data.py")
+        else:
+            logger.info(f"Database contains {row_count} weather records")
     
     # Run the Flask app
     app.run(debug=True, host='0.0.0.0', port=5001)
