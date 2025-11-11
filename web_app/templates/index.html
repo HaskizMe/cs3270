@@ -1,0 +1,142 @@
+{% extends "base.html" %} {% block content %}
+<div class="dashboard">
+    <!-- Statistics Section -->
+    <section class="stats-section">
+        <h2>Database Statistics</h2>
+        <div id="stats-container" class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">--</div>
+                <div class="stat-label">Total Records</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">--°C</div>
+                <div class="stat-label">Avg Min Temp</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">--°C</div>
+                <div class="stat-label">Avg Max Temp</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">--mm</div>
+                <div class="stat-label">Avg Rainfall</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search/Filter Section -->
+    <section class="search-section">
+        <h2>Search Weather Data</h2>
+        <form id="search-form" class="search-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <select id="location" name="location">
+                        <option value="">All Locations</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="rain_today">Rain Today</label>
+                    <select id="rain_today" name="rain_today">
+                        <option value="">Any</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="min_temp_min">Min Temp (°C)</label>
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            id="min_temp_min"
+                            name="min_temp_min"
+                            placeholder="From"
+                            step="0.1"
+                        />
+                        <span>to</span>
+                        <input
+                            type="number"
+                            id="min_temp_max"
+                            name="min_temp_max"
+                            placeholder="To"
+                            step="0.1"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="max_temp_min">Max Temp (°C)</label>
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            id="max_temp_min"
+                            name="max_temp_min"
+                            placeholder="From"
+                            step="0.1"
+                        />
+                        <span>to</span>
+                        <input
+                            type="number"
+                            id="max_temp_max"
+                            name="max_temp_max"
+                            placeholder="To"
+                            step="0.1"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="limit">Results per page</label>
+                    <select id="limit" name="limit">
+                        <option value="10">10</option>
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Search
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section">
+        <div class="results-header">
+            <h2>Results</h2>
+            <div id="results-info" class="results-info"></div>
+        </div>
+
+        <div id="loading" class="loading" style="display: none">
+            <div class="spinner"></div>
+            <p>Loading data...</p>
+        </div>
+
+        <div
+            id="error-message"
+            class="error-message"
+            style="display: none"
+        ></div>
+
+        <div id="results-table" class="table-container">
+            <p class="no-results">
+                Use the search form above to find weather data.
+            </p>
+        </div>
+
+        <div id="pagination" class="pagination" style="display: none"></div>
+    </section>
+</div>
+{% endblock %}
