@@ -1,5 +1,54 @@
 {% extends "base.html" %} {% block content %}
 <div>
+    <!-- Module 6: Visualization Section -->
+    <section class="visualization-section">
+        <h2>Data Visualizations</h2>
+        <p class="viz-description">
+            Generate matplotlib charts to visualize weather data patterns
+        </p>
+
+        <div class="viz-controls">
+            <div class="viz-buttons">
+                <button
+                    class="btn btn-viz"
+                    onclick="loadVisualization('temperature')"
+                >
+                    Temperature Chart
+                </button>
+                <button
+                    class="btn btn-viz"
+                    onclick="loadVisualization('rainfall')"
+                >
+                    Rainfall by Location
+                </button>
+                <button
+                    class="btn btn-viz"
+                    onclick="loadVisualization('humidity')"
+                >
+                    Humidity Comparison
+                </button>
+            </div>
+
+            <div class="viz-filter">
+                <label for="viz-location">Filter by Location:</label>
+                <select id="viz-location">
+                    <option value="">All Locations</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="viz-loading" class="loading" style="display: none">
+            <div class="spinner"></div>
+            <p>Generating visualization...</p>
+        </div>
+
+        <div id="viz-container" class="viz-container">
+            <p class="viz-placeholder">
+                Click a button above to generate a visualization
+            </p>
+        </div>
+    </section>
+
     <!-- Search/Filter Section -->
     <section class="search-section">
         <h2>Search Weather Data</h2>
@@ -80,6 +129,14 @@
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
                         Search
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-concurrent"
+                        onclick="handleConcurrentSearch(event)"
+                        title="Module 7: Uses ThreadPoolExecutor to fetch data from multiple locations concurrently"
+                    >
+                        Concurrent Search
                     </button>
                     <button type="reset" class="btn btn-secondary">
                         Reset

@@ -27,11 +27,20 @@ async function loadLocations() {
 
         if (data.success) {
             const locationSelect = document.getElementById("location");
+            const vizLocationSelect = document.getElementById("viz-location");
+
             data.locations.forEach((location) => {
+                // Add to search dropdown
                 const option = document.createElement("option");
                 option.value = location;
                 option.textContent = location;
                 locationSelect.appendChild(option);
+
+                // Add to visualization dropdown
+                const vizOption = document.createElement("option");
+                vizOption.value = location;
+                vizOption.textContent = location;
+                vizLocationSelect.appendChild(vizOption);
             });
         }
     } catch (error) {
@@ -57,6 +66,24 @@ function handleSearch(event) {
     currentOffset = 0;
 
     loadWeatherData();
+}
+
+// Handle concurrent search (Module 7: Concurrency)
+function handleConcurrentSearch(event) {
+    event.preventDefault();
+
+    const formData = new FormData(document.getElementById("search-form"));
+    currentFilters = {};
+
+    // Build filters object
+    for (let [key, value] of formData.entries()) {
+        if (value && key !== "limit") {
+            // Skip the regular limit, use limit_per_location instead
+            currentFilters[key] = value;
+        }
+    }
+
+    loadWeatherDataConcurrently();
 }
 
 // Handle form reset
@@ -218,4 +245,109 @@ function showError(message) {
     const errorMessage = document.getElementById("error-message");
     errorMessage.textContent = message;
     errorMessage.style.display = "block";
+}
+
+// Load weather data using concurrent processing (Module 7)
+async function loadWeatherDataConcurrently() {
+    const loading = document.getElementById("loading");
+    const errorMessage = document.getElementById("error-message");
+    const resultsTable = document.getElementById("results-table");
+
+    // Show loading
+    loading.style.display = "block";
+    errorMessage.style.display = "none";
+    resultsTable.innerHTML = "";
+
+    try {
+        // Build query string with concurrent-specific parameters
+        const params = new URLSearchParams({
+            ...currentFilters,
+            limit_per_location: 10,
+            max_workers: 4,
+        });
+
+        const response = await fetch(
+            `${API_BASE}/weather/concurrent?${params}`
+        );
+        const data = await response.json();
+
+        loading.style.display = "none";
+
+        if (data.success) {
+            displayResults(data.data);
+            displayConcurrentInfo(data.metadata);
+            document.getElementById("pagination").style.display = "none"; // No pagination for concurrent
+        } else {
+            showError("Failed to load data: " + data.error);
+        }
+    } catch (error) {
+        loading.style.display = "none";
+        showError("Error loading data: " + error.message);
+        console.error("Error:", error);
+    }
+}
+
+// Display concurrent processing information
+function displayConcurrentInfo(metadata) {
+    const resultsInfo = document.getElementById("results-info");
+    resultsInfo.innerHTML = `
+        <div style="background: #e6fffa; padding: 0.75rem; border-radius: 6px; border-left: 4px solid #38b2ac;">
+            <strong>Concurrent Processing</strong><br/>
+            Processed ${metadata.locations_processed} locations in ${metadata.processing_time}s using ${metadata.max_workers} workers<br/>
+            Total records: ${metadata.total_records}
+        </div>
+    `;
+}
+
+// Module 6: Load and display visualizations
+async function loadVisualization(chartType) {
+    const loading = document.getElementById("viz-loading");
+    const container = document.getElementById("viz-container");
+    const location = document.getElementById("viz-location").value;
+
+    // Show loading
+    loading.style.display = "block";
+    container.innerHTML = "";
+
+    try {
+        // Build URL based on chart type
+        let url = `${API_BASE}/visualize/${chartType}`;
+        const params = new URLSearchParams();
+
+        if (location && chartType !== "rainfall") {
+            params.append("location", location);
+        }
+
+        if (params.toString()) {
+            url += `?${params}`;
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        loading.style.display = "none";
+
+        if (data.success) {
+            // Display the chart
+            container.innerHTML = `
+                <div class="viz-result">
+                    <img src="data:image/png;base64,${data.image}" alt="${data.chart_type} chart" class="viz-image"/>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="error-message">
+                    Failed to generate visualization: ${data.error}
+                </div>
+            `;
+        }
+    } catch (error) {
+        loading.style.display = "none";
+        container.innerHTML = `
+            <div class="error-message">
+                Error loading visualization: ${error.message}
+            </div>
+        `;
+        console.error("Error:", error);
+    }
 }
